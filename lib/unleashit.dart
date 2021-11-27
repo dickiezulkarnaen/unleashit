@@ -23,15 +23,14 @@ class FeatureFlagManager {
     required this.persona,
     this.interval = 60
   }) {
-    start();
-    log("FeatureFlagManager is started");
+    log("FeatureFlagManager is initialized");
   }
 
   FeatureFlagsEntity? _flags;
 
   Future<void> _getUnleashClient() async {
     final client = http.Client();
-    client.get(
+    await client.get(
         Uri.parse(proxyUrl),
         headers: { "Authorization" : clientSecret }
     ).then((value) => onSuccess(jsonDecode(value.body)));
@@ -67,6 +66,7 @@ class FeatureFlagManager {
   }
 
   Future start() async {
+    log("FeatureFlagManager is started");
     var count = 0.0;
     bool flag = true;
 
