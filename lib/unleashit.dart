@@ -12,18 +12,27 @@ class FeatureFlagManager {
   final String clientSecret;
   final String env;
   final String persona;
-  int interval = 60;
+  Duration? pollInterval;
 
-  //DIBIKIN PARAMETER KARENA ADA KEMUNGKINAN DIBIKIN LIBRARY BENERAN.
-  //TAPI BARU KEMUNGKINAN LHO YA...
   FeatureFlagManager({
     required this.proxyUrl,
     required this.clientSecret,
     required this.env,
     required this.persona,
-    this.interval = 60
-  }) {
+    this.pollInterval
+  });
+
+  void fetch() async {
     log("FeatureFlagManager is initialized");
+    await _getUnleashClient();
+    checkInterval();
+  }
+
+  void checkInterval() async {
+    if (pollInterval != null) {
+      await Future.delayed(pollInterval!);
+      _poll(pollInterval!);
+    }
   }
 
   FeatureFlagsEntity? _flags;
@@ -60,21 +69,20 @@ class FeatureFlagManager {
     return isEnabled;
   }
 
-  // for example before real implementation
   bool isFeatureEnabled(String featureName) {
     return _isEnabled(_getToggleName(featureName));
   }
 
-  Future start() async {
-    log("FeatureFlagManager is started");
+  Future _poll(Duration interval) async {
+    log("FeatureFlagManager polling is started");
     var count = 0.0;
     bool flag = true;
 
     while (flag){
       count++;
       log("going on: $count");
-      await _getUnleashClient();
-      await Future.delayed(Duration(seconds: interval));
+      _getUnleashClient();
+      await Future.delayed(interval);
     }
   }
 
