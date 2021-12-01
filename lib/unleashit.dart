@@ -22,7 +22,7 @@ class FeatureFlagManager {
     this.pollInterval
   });
 
-  void fetch() async {
+  Future fetch() async {
     log("FeatureFlagManager is initialized");
     await _getUnleashClient();
     checkInterval();
