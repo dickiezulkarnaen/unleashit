@@ -26,11 +26,11 @@ final unleash = GreduUnleash.init(config);
 Check is a feature enabled :
 
 ```dart
-if (unleash.isFeatureEnabled("payment")) {
-			// Enable feature
-		} else {
-			// Disable feature
-		}
+    if (unleash.isFeatureEnabled("payment")) {
+      // Enable feature
+    } else {
+      // Disable feature
+    }
 }
 ```
 
