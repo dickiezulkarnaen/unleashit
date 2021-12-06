@@ -1,22 +1,23 @@
 library unleashit;
 
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
-import 'package:unleashit/gredu_unleash_config.dart';
+import 'package:unleashit/unleashit_config.dart';
 
 import 'extention.dart';
 import 'feature_flags_entity.dart';
 
-class GreduUnleash {
+class Unleashit {
 
-  GreduUnleashConfig? _config;
+  UnleashitConfig? _config;
 
   FeatureFlagsEntity? _data;
 
-  GreduUnleashConfig? getConfig() {
+  UnleashitConfig? getConfig() {
     return _config;
   }
 
@@ -59,9 +60,11 @@ class GreduUnleash {
       } on SocketException {
         debug('No Internet connection');
       } on HttpException {
-        debug("Couldn't find the get method");
+        debug('Network not found');
       } on FormatException {
-        debug("Bad response format");
+        debug('Unparsable response format');
+      } on TimeoutException {
+        debug('Connection timeout');
       }
     }
   }
@@ -98,12 +101,12 @@ class GreduUnleash {
   }
 
 
-  static GreduUnleash? _unleash;
+  static Unleashit? _unleash;
 
   /// Static method for initialization
   /// It's required function
-  static Future<GreduUnleash> init({required GreduUnleashConfig config}) async {
-    _unleash ??= GreduUnleash();
+  static Future<Unleashit> init({required UnleashitConfig config}) async {
+    _unleash ??= Unleashit();
     _unleash!._config ??= config;
     await _unleash!._getUnleashClient();
     _unleash!._checkInterval();

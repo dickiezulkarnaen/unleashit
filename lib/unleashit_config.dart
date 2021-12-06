@@ -1,7 +1,7 @@
 
 /// This is a configuration for start using GreduUnleash
 /// It's contains Credential that provided by Unleash administrator
-class GreduUnleashConfig {
+class UnleashitConfig {
 
   /// Use provided proxy URL by your Unleash administrator.
   /// Once again, we just use opensource standard API Access.
@@ -19,7 +19,7 @@ class GreduUnleashConfig {
   /// But if you want to fetch data in single time, keep it null. And it will called on 'init' method
   Duration? pollInterval;
 
-  GreduUnleashConfig({
+  UnleashitConfig({
     required this.proxyUrl,
     required this.headers,
     this.pollInterval
