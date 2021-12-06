@@ -95,7 +95,7 @@ class GreduUnleash {
 
   /// Static method for initialization
   /// It's required function
-  Future<GreduUnleash> init({required GreduUnleashConfig config}) async {
+  static Future<GreduUnleash> init({required GreduUnleashConfig config}) async {
     _unleash ??= GreduUnleash();
     _unleash!._config ??= config;
     await _unleash!._getUnleashClient();
