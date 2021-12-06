@@ -55,7 +55,7 @@ class GreduUnleash {
       try {
         final response = await client.get(Uri.parse(_config!.proxyUrl), headers: _config!.headers);
         if (response.statusCode != 200) throw HttpException('${response.statusCode}');
-        _data = jsonDecode(response.body);
+        _onSuccess(jsonDecode(response.body));
       } on SocketException {
         debug('No Internet connection');
       } on HttpException {
