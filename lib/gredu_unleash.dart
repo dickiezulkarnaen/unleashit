@@ -2,12 +2,13 @@ library unleashit;
 
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
+import 'package:http/http.dart' as http;
 import 'package:unleashit/gredu_unleash_config.dart';
 
 import 'extention.dart';
 import 'feature_flags_entity.dart';
-import 'package:http/http.dart' as http;
 
 class GreduUnleash {
 
@@ -51,11 +52,17 @@ class GreduUnleash {
     if (_config != null) {
       debug("fetching data...");
       final client = http.Client();
-      await client.get(
-          Uri.parse(_config!.proxyUrl),
-          headers: _config!.headers
-      ).then((value) => _onSuccess(jsonDecode(value.body))
-      ).catchError((error) => throw(jsonDecode(error.toString())["message"]));
+      try {
+        final response = await client.get(Uri.parse(_config!.proxyUrl), headers: _config!.headers);
+        if (response.statusCode != 200) throw HttpException('${response.statusCode}');
+        _data = jsonDecode(response.body);
+      } on SocketException {
+        debug('No Internet connection');
+      } on HttpException {
+        debug("Couldn't find the get method");
+      } on FormatException {
+        debug("Bad response format");
+      }
     }
   }
 
